@@ -158,6 +158,26 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
+    // --- NOTES WIDGET ---
+    const notesTextarea = document.getElementById('notes-textarea');
+    const notesStatus = document.getElementById('notes-status');
+
+    // Load notes
+    notesTextarea.value = localStorage.getItem('dashboard-notes') || "Voici vos notes rapides. Modifiez-les et elles se sauvegarderont automatiquement !";
+
+    let saveTimeout;
+    notesTextarea.addEventListener('input', () => {
+        notesStatus.textContent = 'Enregistrement...';
+        notesStatus.classList.add('saving');
+        
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => {
+            localStorage.setItem('dashboard-notes', notesTextarea.value);
+            notesStatus.textContent = 'Enregistré';
+            notesStatus.classList.remove('saving');
+        }, 1000);
+    });
+
     // Initial render
     renderTasks();
 });
